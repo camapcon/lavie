@@ -62,22 +62,6 @@
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
-              <div class="item-inner">
-                <div class="item-title item-label">Từ ngày</div>
-                <div class="item-input-wrap">
-                  <input id="fromdate" type="date">
-                </div>
-              </div>
-            </li>
-            <li class="item-content item-input">
-              <div class="item-inner">
-                <div class="item-title item-label">Đến ngày</div>
-                <div class="item-input-wrap">
-                  <input id="todate" type="date">
-                </div>
-              </div>
-            </li>
           </ul>
         </div>
       </div>
@@ -226,7 +210,7 @@
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
           mimeType: "image/jpeg",
-          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:$('#note').val(), location:$('#location').val(), address:$('#address').val(), city:app.data.preload.city, district:$('#district').val(), fromdate:$('#fromdate').val(), todate:$('#todate').val() },
+          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:$('#note').val(), location:$('#location').val(), address:$('#address').val(), city:app.data.preload.city, district:$('#district').val() },
           httpMethod: "POST",
           chunkedMode: false
         };

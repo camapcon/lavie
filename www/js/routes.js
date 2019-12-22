@@ -100,7 +100,8 @@ var routes = [
                 loggedin: localStorage.getItem("loggedin"),
                 checkin: json.checkin!='' ? json.checkin : '<span class="text-color-red">Bạn chưa checkin</span>',
                 checkout:json.checkout!='' ? json.checkout : '<span class="text-color-red">Bạn chưa checkout</span>',
-                workday:json.workday
+                workday:json.workday,
+                cityname:json.cityname
               }
             }
           );
