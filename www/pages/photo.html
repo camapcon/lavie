@@ -132,7 +132,7 @@
        uploaded: 0,
        upload_total: 0,
        programs: this.$app.data.preload.programs,
-       districts: this.$app.data.preload.districts
+       districts: this.$app.data.districts
       }
     },
     // Component Methods
@@ -238,13 +238,15 @@
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
           mimeType: "image/jpeg",
-          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:base64($('#note').val()), location:$('#location').val(), address:base64($('#address').val()), street:base64($('#street').val()), city:base64(app.data.preload.city), district:base64($('#district').val()) },
+          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:base64($('#note').val()), location:$('#location').val(), address:base64($('#address').val()), street:base64($('#street').val()), city:base64(app.data.city), district:base64($('#district').val()) },
           httpMethod: "POST",
           chunkedMode: false
         };
         var ft = new FileTransfer();
         ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/photo"), function(raw){
           app.dialog.close();
+          //app.dialog.alert(raw.response);
+          //return;
           if(raw.response=='invalid'){
             app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){
               router.navigate('/login/');
@@ -255,7 +257,6 @@
             app.dialog.alert('Không gửi được hình chụp từ Camera', 'Báo lỗi');
             return;
           }
-          //app.dialog.alert(raw.response);
           if(raw.response=='success'){
             app.dialog.close();
             if(index+1 < self.upload_total)

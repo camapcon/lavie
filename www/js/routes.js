@@ -87,8 +87,8 @@ var routes = [
           var json = JSON.parse(raw);
           app.data.checkin = json.checkin;
           app.data.checkout = json.checkout;
-          app.data.preload.city = json.city;
-          app.data.preload.districts = json.districts;
+          app.data.city = json.city;
+          app.data.districts = json.districts;
           resolve(
             {
               componentUrl: './pages/status.html',

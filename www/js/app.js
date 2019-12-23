@@ -22,6 +22,8 @@ var app = new Framework7({
   data: function () {
     return {
       preload: {},
+      city: '',
+      districts: [],
       checkin: '',
       checkout: ''
     };
