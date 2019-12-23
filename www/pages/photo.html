@@ -36,6 +36,17 @@
             </li>
             <li class="item-content item-input">
               <div class="item-inner">
+                <div class="item-title item-label">Số Stickers</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select id="stickers">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
                 <div class="item-title item-label">Tên cửa hàng</div>
                 <div class="item-input-wrap">
                   <input id="location" type="text">
@@ -238,7 +249,7 @@
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
           mimeType: "image/jpeg",
-          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:base64($('#note').val()), location:$('#location').val(), address:base64($('#address').val()), street:base64($('#street').val()), city:base64(app.data.city), district:base64($('#district').val()) },
+          headers: { Connection: "close", token:token, programid:$('#programid').val(), stickers:$('#stickers').val(), note:base64($('#note').val()), location:$('#location').val(), address:base64($('#address').val()), street:base64($('#street').val()), city:base64(app.data.city), district:base64($('#district').val()) },
           httpMethod: "POST",
           chunkedMode: false
         };
