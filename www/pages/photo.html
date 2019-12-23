@@ -44,9 +44,17 @@
             </li>
             <li class="item-content item-input">
               <div class="item-inner">
-                <div class="item-title item-label">Địa chỉ</div>
+                <div class="item-title item-label">Số nhà</div>
                 <div class="item-input-wrap">
                   <input id="address" type="text">
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Tên đường</div>
+                <div class="item-input-wrap">
+                  <input id="street" type="text">
                 </div>
               </div>
             </li>
@@ -56,7 +64,7 @@
                 <div class="item-input-wrap input-dropdown-wrap">
                   <select id="district">
                     {{#each districts}}
-                    <option value="{{this.id}}">{{this.name}}</option>
+                    <option value="{{this.name}}">{{this.name}}</option>
                     {{/each}}
                   </select>
                 </div>
@@ -203,9 +211,9 @@
         var token = localStorage.getItem("token");
         self.uploaded = 0;
         self.upload_total = $('img[data-uri]').length;
-        if(self.upload_total==0)
+        if(self.upload_total < 4)
         {
-          app.dialog.alert('Bạn chưa chọn hình nào', 'Báo lỗi');
+          app.dialog.alert('Bạn phải báo cáo đủ 4 hình', 'Báo lỗi');
           return;
         }
         try{
@@ -226,7 +234,7 @@
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
           mimeType: "image/jpeg",
-          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:$('#note').val(), location:$('#location').val(), address:$('#address').val(), city:app.data.preload.city, district:$('#district').val(), fromdate:$('#fromdate').val(), todate:$('#todate').val() },
+          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:$('#note').val(), location:$('#location').val(), address:$('#address').val(), street:$('#street').val(), city:app.data.preload.city, district:$('#district').val(), fromdate:$('#fromdate').val(), todate:$('#todate').val() },
           httpMethod: "POST",
           chunkedMode: false
         };
