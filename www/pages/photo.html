@@ -200,6 +200,26 @@
           app.dialog.alert('Bạn phải báo cáo đủ 4 hình', 'Báo lỗi');
           return;
         }
+        if($('#location').val()=="")
+        {
+          app.dialog.alert('Bạn phải nhập tên cửa hàng', 'Báo lỗi');
+          return;
+        }
+        if($('#address').val()=="")
+        {
+          app.dialog.alert('Bạn phải nhập số nhà', 'Báo lỗi');
+          return;
+        }
+        if($('#street').val()=="")
+        {
+          app.dialog.alert('Bạn phải nhập tên đường', 'Báo lỗi');
+          return;
+        }
+        if($('#district').val()=="")
+        {
+          app.dialog.alert('Bạn phải chọn quận/huyện', 'Báo lỗi');
+          return;
+        }
         try{
         self.upload(0);
         }
