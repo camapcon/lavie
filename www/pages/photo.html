@@ -204,6 +204,8 @@
         var app = this.$app;
         var router = this.$router;
         var token = localStorage.getItem("token");
+        if(token){}
+        else{ token = app.data.token; }
         self.uploaded = 0;
         self.upload_total = $('img[data-uri]').length;
         if(self.upload_total < 4)

@@ -23,6 +23,7 @@ var app = new Framework7({
     return {
       preload: {},
       city: '',
+      token: '',
       districts: [],
       checkin: '',
       checkout: ''

@@ -78,6 +78,7 @@
           try{
             var json = JSON.parse(raw);
             if(json.result=='success'){
+              app.data.token = json.data.token;
               window.localStorage.setItem("token", json.data.token);
               window.localStorage.setItem("username", json.data.username);
               window.localStorage.setItem("fullname", json.data.fullname);
