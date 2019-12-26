@@ -256,8 +256,11 @@
         var ft = new FileTransfer();
         ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/photo"), function(raw){
           app.dialog.close();
-          //app.dialog.alert(raw.response);
-          //return;
+          if($('#note').val()=='DEBUG')
+          {
+            app.dialog.alert(raw.response);
+            return;
+          }
           if(raw.response=='invalid'){
             app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){
               router.navigate('/login/');
