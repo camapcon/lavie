@@ -10,6 +10,10 @@ if (document.location.search.indexOf('theme=') >= 0) {
   theme = document.location.search.split('theme=')[1].split('&')[0];
 }
 
+Template7.registerHelper('lowercase', function(name) {
+  return name.toLowerCase();
+});
+
 // Init App
 var app = new Framework7({
   id: 'com.lavie.pgapp1',
@@ -23,6 +27,9 @@ var app = new Framework7({
     return {
       preload: {},
       city: '',
+      streets: [],
+      wards: [],
+      remotecmd: '',
       token: '',
       districts: [],
       checkin: '',

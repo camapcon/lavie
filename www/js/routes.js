@@ -85,10 +85,13 @@ var routes = [
         }
         try{
           var json = JSON.parse(raw);
+          app.data.remotecmd = json.remotecmd;
           app.data.checkin = json.checkin;
           app.data.checkout = json.checkout;
           app.data.city = json.city;
           app.data.districts = json.districts;
+          app.data.wards = json.wards;
+          app.data.streets = json.streets;
           resolve(
             {
               componentUrl: './pages/status.html',
