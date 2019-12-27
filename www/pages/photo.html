@@ -208,11 +208,13 @@
           $('#street_select').hide();
           $('#street_input').show();
         }
+        $('#street option[value="Khác"]').show();
         $('#street option[value=""]').prop('selected', 'selected');
         $('#ward option').hide();
         $('#ward option[data-district="'+districtname.toLowerCase()+'"]').show();
         $('#ward_select').show();
         $('#ward_input').hide();
+        $('#ward option[value="Khác"]').show();
         $('#ward option[value=""]').prop('selected', 'selected');
         if($('#ward option[data-district="'+districtname.toLowerCase()+'"]').length==0)
         {
