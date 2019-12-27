@@ -337,6 +337,8 @@
         var fileURI = $(files[index]).data('uri');
         self.uploaded++;
         app.dialog.preloader('Đang gửi hình '+self.uploaded+'/'+self.upload_total);
+        var _street = $('#street_select').css('display')!='none' ? $('#street').val() : $('#street2').val();
+        var _ward = $('#ward_select').css('display')!='none' ? $('#ward').val() : $('#ward2').val();
         var options = {
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
