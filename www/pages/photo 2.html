@@ -36,17 +36,85 @@
             </li>
             <li class="item-content item-input">
               <div class="item-inner">
-                <div class="item-title item-label">Từ ngày</div>
-                <div class="item-input-wrap">
-                  <input id="fromdate" type="date">
+                <div class="item-title item-label">Số Stickers</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select id="stickers">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
                 </div>
               </div>
             </li>
             <li class="item-content item-input">
               <div class="item-inner">
-                <div class="item-title item-label">Đến ngày</div>
+                <div class="item-title item-label">Tên cửa hàng</div>
                 <div class="item-input-wrap">
-                  <input id="todate" type="date">
+                  <input id="location" type="text">
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Số nhà</div>
+                <div class="item-input-wrap">
+                  <input id="address" type="text">
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Quận/huyện</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select id="district" @change="selectdistrict">
+                    <option value=""></option>
+                    {{#each districts}}
+                    <option value="{{this.name}}">{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li id="street_select" class="item-content item-input" style="display: none;">
+              <div class="item-inner">
+                <div class="item-title item-label">Tên đường</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select id="street">
+                    <option value=""></option>
+                    {{#each streets}}
+                    <option value="{{this.street}}" data-district="{{lowercase this.district}}">{{this.street}}</option>
+                    {{/each}}
+                    <option value="Khác">Khác</option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li id="street_input" class="item-content item-input" style="display: none;">
+              <div class="item-inner">
+                <div class="item-title item-label">Tên đường</div>
+                <div class="item-input-wrap">
+                  <input id="street2" type="text"/>
+                </div>
+              </div>
+            </li>
+            <li id="ward_select" class="item-content item-input" style="display: none;">
+              <div class="item-inner">
+                <div class="item-title item-label">Phường/xã</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select id="ward">
+                    <option value=""></option>
+                    {{#each wards}}
+                    <option value="{{this.ward}}" data-district="{{lowercase this.district}}">{{this.ward}}</option>
+                    {{/each}}
+                    <option value="Khác">Khác</option>
+                  </select>
+                </div>
+              </div>
+            </li>
+            <li id="ward_input" class="item-content item-input" style="display: none;">
+              <div class="item-inner">
+                <div class="item-title item-label">Phường/xã</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <input id="ward2" type="text"/>
                 </div>
               </div>
             </li>
@@ -67,7 +135,7 @@
           </div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" {{#if nolibrary}}style="display: none;"{{/if}}>
         <div class="card-header">Chọn hình chụp sẵn</div>
         <div class="card-content">
           <div class="block" style="padding: 10px;">
@@ -111,11 +179,49 @@
       return {
        uploaded: 0,
        upload_total: 0,
-       programs: this.$app.data.preload.programs
+       programs: this.$app.data.preload.programs,
+       districts: this.$app.data.districts,
+       streets: this.$app.data.streets,
+       wards: this.$app.data.wards,
+       nolibrary: this.$app.data.remotecmd.indexOf('nolibrary') >= 0
       }
     },
     // Component Methods
     methods: {
+      selectdistrict: function() {
+        var self = this;
+        var $ = this.$;
+        var app = this.$app;
+        var router = this.$router;
+        var districtname = $('#district').val();
+        if(districtname=='')
+        {
+          $('#street_select').hide();
+          $('#ward_select').hide();
+        }
+        $('#street option').hide();
+        $('#street option[data-district="'+districtname.toLowerCase()+'"]').show();
+        $('#street_select').show();
+        $('#street_input').hide();
+        if($('#street option[data-district="'+districtname.toLowerCase()+'"]').length==0)
+        {
+          $('#street_select').hide();
+          $('#street_input').show();
+        }
+        $('#street option[value="Khác"]').show();
+        $('#street option[value=""]').prop('selected', 'selected');
+        $('#ward option').hide();
+        $('#ward option[data-district="'+districtname.toLowerCase()+'"]').show();
+        $('#ward_select').show();
+        $('#ward_input').hide();
+        $('#ward option[value="Khác"]').show();
+        $('#ward option[value=""]').prop('selected', 'selected');
+        if($('#ward option[data-district="'+districtname.toLowerCase()+'"]').length==0)
+        {
+          $('#ward_select').hide();
+          $('#ward_input').show();
+        }
+      },
       camera: function(index) {
         var self = this;
         var $ = this.$;
@@ -129,7 +235,8 @@
            quality: 50,
            correctOrientation: true,
            destinationType: navigator.camera.DestinationType.FILE_URI,
-           sourceType: Camera.PictureSourceType.CAMERA
+           sourceType: Camera.PictureSourceType.CAMERA,
+           saveToPhotoAlbum: true
         });
       },
       library: function(index) {
@@ -172,11 +279,50 @@
         var app = this.$app;
         var router = this.$router;
         var token = localStorage.getItem("token");
+        if(token){}
+        else{ token = app.data.token; }
         self.uploaded = 0;
         self.upload_total = $('img[data-uri]').length;
-        if(self.upload_total==0)
+        if($('#location').val()=="")
         {
-          app.dialog.alert('Bạn chưa chọn hình nào', 'Báo lỗi');
+          app.dialog.alert('Bạn phải nhập tên cửa hàng', 'Báo lỗi');
+          return;
+        }
+        if($('#address').val()=="")
+        {
+          app.dialog.alert('Bạn phải nhập số nhà', 'Báo lỗi');
+          return;
+        }
+        if($('#district').val()=="")
+        {
+          app.dialog.alert('Bạn phải chọn quận/huyện', 'Báo lỗi');
+          return;
+        }
+        var _street = $('#street_select').css('display')!='none' ? $('#street').val() : $('#street2').val();
+        if(_street=="")
+        {
+          app.dialog.alert('Bạn phải nhập tên đường', 'Báo lỗi');
+          return;
+        }
+        var _ward = $('#ward_select').css('display')!='none' ? $('#ward').val() : $('#ward2').val();
+        if(_ward=="")
+        {
+          app.dialog.alert('Bạn phải nhập phường/xã', 'Báo lỗi');
+          return;
+        }
+        if(_street=="Khác" && $('#note').val()=="")
+        {
+          app.dialog.alert('Bạn đã chọn đường "Khác" thì phải điền vào ghi chú', 'Báo lỗi');
+          return;
+        }
+        if(_ward=="Khác" && $('#note').val()=="")
+        {
+          app.dialog.alert('Bạn đã chọn phường/xã "Khác" thì phải điền vào ghi chú', 'Báo lỗi');
+          return;
+        }
+        if(self.upload_total < 4)
+        {
+          app.dialog.alert('Bạn phải báo cáo đủ 4 hình', 'Báo lỗi');
           return;
         }
         try{
@@ -193,17 +339,26 @@
         var fileURI = $(files[index]).data('uri');
         self.uploaded++;
         app.dialog.preloader('Đang gửi hình '+self.uploaded+'/'+self.upload_total);
+        var _street = $('#street_select').css('display')!='none' ? $('#street').val() : $('#street2').val();
+        var _ward = $('#ward_select').css('display')!='none' ? $('#ward').val() : $('#ward2').val();
         var options = {
           fileKey: "photo",
           fileName: fileURI.substr(fileURI.lastIndexOf('/') + 1),
           mimeType: "image/jpeg",
-          headers: { Connection: "close", token:token, programid:$('#programid').val(), note:$('#note').val(), fromdate:$('#fromdate').val(), todate:$('#todate').val() },
+          headers: { Connection: "close", token:token, programid:$('#programid').val(), stickers:$('#stickers').val(), note:base64($('#note').val()), location:$('#location').val(), address:base64($('#address').val()), street:base64(_street), city:base64(app.data.city), 
+          ward:base64(_ward), 
+          district:base64($('#district').val()) },
           httpMethod: "POST",
           chunkedMode: false
         };
         var ft = new FileTransfer();
         ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/photo"), function(raw){
           app.dialog.close();
+          if($('#note').val()=='DEBUG')
+          {
+            app.dialog.alert(raw.response);
+            return;
+          }
           if(raw.response=='invalid'){
             app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){
               router.navigate('/login/');
@@ -214,7 +369,6 @@
             app.dialog.alert('Không gửi được hình chụp từ Camera', 'Báo lỗi');
             return;
           }
-          //app.dialog.alert(raw.response);
           if(raw.response=='success'){
             app.dialog.close();
             if(index+1 < self.upload_total)
@@ -227,7 +381,7 @@
           }
         }, function(error){
           app.dialog.close();
-          app.dialog.alert('Không gửi được hình (' + error.code + ')', 'Báo lỗi');
+          app.dialog.alert('Không gửi được hình (' + error.exception + ')', 'Báo lỗi');
           /*
           app.dialog.alert(error.code, 'Code');
           app.dialog.alert(error.source, 'Source');

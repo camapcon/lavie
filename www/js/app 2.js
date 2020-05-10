@@ -10,6 +10,10 @@ if (document.location.search.indexOf('theme=') >= 0) {
   theme = document.location.search.split('theme=')[1].split('&')[0];
 }
 
+Template7.registerHelper('lowercase', function(name) {
+  return name.toLowerCase();
+});
+
 // Init App
 var app = new Framework7({
   id: 'com.lavie.pgapp1',
@@ -22,6 +26,12 @@ var app = new Framework7({
   data: function () {
     return {
       preload: {},
+      city: '',
+      streets: [],
+      wards: [],
+      remotecmd: '',
+      token: '',
+      districts: [],
       checkin: '',
       checkout: ''
     };
@@ -111,7 +121,7 @@ var app = new Framework7({
           }
         }
         catch(e){
-          app.dialog.alert('Vui lòng cập nhật phiên bản mới', 'Báo lỗi');
+          app.dialog.alert(e.message, 'Báo lỗi');
           return;
         }
       },function(){
@@ -160,7 +170,7 @@ app.request.post('http://lavie.liveapps.top/index.php/app/allproducts', {}, func
     app.data.preload = json;
   }
   catch(e){
-    app.dialog.alert('Vui lòng cập nhật phiên bản mới', 'Báo lỗi');
+    app.dialog.alert(e.message, 'Báo lỗi');
     return;
   }
 },function(xhr, status){
@@ -176,4 +186,14 @@ function onDeviceReady() {
   }, function(error) {
       app.dialog.alert('Không thể xác định vị trí của bạn', 'Lỗi GPS');
   });
+}
+
+function base64(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
 }

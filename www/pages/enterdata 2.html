@@ -6,7 +6,7 @@
           <i class="icon icon-back"></i>
           <span class="ios-only">Quay lại</span>
         </a>
-        <div class="title">Báo cáo tồn kho</div>
+        <div class="title">Gửi báo cáo</div>
         <div class="right">
           <a href="#" class="link icon-only panel-open" data-panel="right">
             <i class="icon f7-icons ios-only">menu</i>
@@ -29,24 +29,41 @@
               </li>
               <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title item-label">Số lượng tồn đầu</div>
+                    <div class="item-title item-label">Số tiếp cận</div>
                     <div class="item-input-wrap">
-                      <input id="stocks1" type="number" placeholder="Nhập số lượng hàng">
+                      <input id="views" type="number" placeholder="Nhập số người">
                       <span class="input-clear-button"></span>
                     </div>
                   </div>
               </li>
               <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title item-label">Số lượng tồn cuối</div>
+                    <div class="item-title item-label">Số người mua</div>
                     <div class="item-input-wrap">
-                      <input id="stocks2" type="number" placeholder="Nhập số lượng hàng">
+                      <input id="buyers" type="number" placeholder="Nhập số người">
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+              </li>
+              <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Số lượng mua</div>
+                    <div class="item-input-wrap">
+                      <input id="buys" type="number" placeholder="Nhập số sản phẩm">
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+              </li>
+              <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Trưng bày thực tế (Đơn vị:{{uom}})</div>
+                    <div class="item-input-wrap">
+                      <input id="display" type="number" placeholder="Nhập số lượng">
                       <span class="input-clear-button"></span>
                     </div>
                   </div>
               </li>
           </ul>
-        
           <div class="block">
             <p class="row">
               <button class="col button button-big button-raised button-fill" @click="submit">Gửi báo cáo</button>
@@ -85,24 +102,30 @@
         var router = this.$router;
         var token = localStorage.getItem("token");
         var productid = $('#productid').val();
-        var stocks1 = $('#stocks1').val();
-        var stocks2 = $('#stocks2').val();
-        if(stocks1==''){
-          app.dialog.alert('Vui lòng nhập số lượng tồn đầu', 'Nhắc nhở');
+        var views = $('#views').val();
+        var buyers = $('#buyers').val();
+        var buys = $('#buys').val();
+        var display = $('#display').val();
+        if(views=='' || buyers=='' || buys=='' || display==''){
+          app.dialog.alert('Vui lòng nhập đủ số liệu báo cáo', 'Nhắc nhở');
           return;
         }
-        if(stocks2==''){
-          app.dialog.alert('Vui lòng nhập số lượng tồn cuối', 'Nhắc nhở');
+        if(parseInt(views) < parseInt(buyers)){
+          app.dialog.alert('Số tiếp cận không được ít hơn số người mua', 'Nhắc nhở');
           return;
         }
-        app.request.post('http://lavie.liveapps.top/index.php/app/inventory', { 
-            productid:productid, stocks1:stocks1, stocks2:stocks2, token:token
+        if(parseInt(buys) > parseInt(display)){
+          app.dialog.alert('Số lượng mua không được lớn hơn số trưng bày', 'Nhắc nhở');
+          return;
+        }
+        app.request.post('http://lavie.liveapps.top/index.php/app/report', { 
+            productid:productid, views:views, buyers:buyers, buys:buys, display:display, token:token
         }, function (raw) {
           try{
             var json = JSON.parse(raw);
             if(json.result=='success'){
               self.showToastBottom('Báo cáo thành công', function(){
-                router.back('/inventory_product/'+self.categoryid, {reloadAll:true, ignoreCache:true});
+                router.back('/product/'+self.categoryid, {reloadAll:true, ignoreCache:true});
               });
               return;
             }
@@ -117,13 +140,13 @@
             app.dialog.alert('Gửi báo cáo không thành công', 'Báo lỗi');
           }
           catch(e){
-            app.dialog.alert('Vui lòng cập nhật phiên bản mới', 'Báo lỗi');
+            app.dialog.alert(e.message, 'Báo lỗi');
           return;
           }
         },function(){
           app.dialog.alert('Vui lòng kiểm tra lại kết nối', 'Báo lỗi');
         });
-      }
+      },
     },
     // Component Data
     data: function () {
@@ -134,8 +157,7 @@
         category:product.category,
         categoryid:product.categoryid,
         brand:product.brand,
-        uom:product.uom,
-        reasons: this.$app.data.preload.reasons
+        uom:product.uom
       }
     },
     on: {

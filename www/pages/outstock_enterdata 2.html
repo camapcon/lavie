@@ -137,7 +137,7 @@
           app.dialog.alert('Vui lòng nhập số lượng tồn', 'Nhắc nhở');
           return;
         }
-        app.request.post('http://lavie.liveapps.top/index.php/app/outstock', { 
+        app.request.post('http://nestle.liveapps.top/index.php/app/outstock', { 
             productid:productid, reason:reason, stocks:stocks, token:token
         }, function (raw) {
           try{
@@ -186,7 +186,7 @@
           chunkedMode: false
         };
         var ft = new FileTransfer();
-        ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/outstock/photo/"+oosid), function(raw){
+        ft.upload(fileURI, encodeURI("http://nestle.liveapps.top/index.php/app/outstock/photo/"+oosid), function(raw){
           app.dialog.close();
           if(raw.response=='invalid'){
             app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){

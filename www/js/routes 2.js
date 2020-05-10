@@ -84,9 +84,15 @@ var routes = [
           return;
         }
         try{
+          app.data.token = token;
           var json = JSON.parse(raw);
+          app.data.remotecmd = json.remotecmd;
           app.data.checkin = json.checkin;
           app.data.checkout = json.checkout;
+          app.data.city = json.city;
+          app.data.districts = json.districts;
+          app.data.wards = json.wards;
+          app.data.streets = json.streets;
           resolve(
             {
               componentUrl: './pages/status.html',
@@ -96,19 +102,16 @@ var routes = [
               context: {
                 fullname: localStorage.getItem("fullname"),
                 loggedin: localStorage.getItem("loggedin"),
-                location: localStorage.getItem("location"),
                 checkin: json.checkin!='' ? json.checkin : '<span class="text-color-red">Bạn chưa checkin</span>',
                 checkout:json.checkout!='' ? json.checkout : '<span class="text-color-red">Bạn chưa checkout</span>',
-                reports:json.reports,
-                sum_reports:json.sum_reports,
-                empty_reports:json.reports.length==0,
-                workday:json.workday
+                workday:json.workday,
+                cityname:json.cityname
               }
             }
           );
         }
         catch(e){
-          app.dialog.alert('Vui lòng cập nhật phiên bản mới', 'Báo lỗi');
+          app.dialog.alert(e.message, 'Báo lỗi');
           return;
         }
       },function(){
