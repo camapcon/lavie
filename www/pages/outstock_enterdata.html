@@ -165,7 +165,7 @@
             app.dialog.alert('Vui lòng cập nhật phiên bản mới', 'Báo lỗi');
           return;
           }
-        },function(){
+        },function(e){
           app.dialog.alert('Vui lòng kiểm tra lại kết nối', 'Báo lỗi');
         });
       },
@@ -188,6 +188,7 @@
         var ft = new FileTransfer();
         ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/outstock/photo/"+oosid), function(raw){
           app.dialog.close();
+        //alert(raw.response);
           if(raw.response=='invalid'){
             app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){
               router.navigate('/login/');
