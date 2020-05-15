@@ -47,14 +47,14 @@
               </li>
               <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title item-label">Số lượng mua</div>
+                    <div class="item-title item-label">Số lượng mua (lon)</div>
                     <div class="item-input-wrap">
                       <input id="buys" type="number" placeholder="Nhập số sản phẩm">
                       <span class="input-clear-button"></span>
                     </div>
                   </div>
               </li>
-              <li class="item-content">
+              <!--li class="item-content">
                   <div class="item-inner">
                     <div class="item-title item-label">Trưng bày thực tế (Đơn vị:{{uom}})</div>
                     <div class="item-input-wrap">
@@ -62,7 +62,7 @@
                       <span class="input-clear-button"></span>
                     </div>
                   </div>
-              </li>
+              </li-->
           </ul>
           <div class="block">
             <p class="row">
@@ -105,7 +105,7 @@
         var views = $('#views').val();
         var buyers = $('#buyers').val();
         var buys = $('#buys').val();
-        var display = $('#display').val();
+        //var display = $('#display').val();
         if(views=='' || buyers=='' || buys=='' || display==''){
           app.dialog.alert('Vui lòng nhập đủ số liệu báo cáo', 'Nhắc nhở');
           return;
@@ -114,12 +114,14 @@
           app.dialog.alert('Số tiếp cận không được ít hơn số người mua', 'Nhắc nhở');
           return;
         }
+        /*
         if(parseInt(buys) > parseInt(display)){
           app.dialog.alert('Số lượng mua không được lớn hơn số trưng bày', 'Nhắc nhở');
           return;
         }
+        */
         app.request.post('http://lavie.liveapps.top/index.php/app/report', { 
-            productid:productid, views:views, buyers:buyers, buys:buys, display:display, token:token
+            productid:productid, views:views, buyers:buyers, buys:buys, display:0, token:token
         }, function (raw) {
           try{
             var json = JSON.parse(raw);

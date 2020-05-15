@@ -78,6 +78,7 @@ var app = new Framework7({
       });
     },
     checkout: function () {
+      /*
       app.panel.close();
       var router = app.router;
       var token = localStorage.getItem("token");
@@ -116,6 +117,61 @@ var app = new Framework7({
         }
       },function(){
         app.dialog.alert('Vui lòng kiểm tra lại kết nối', 'Báo lỗi');
+      });
+      */
+      app.panel.close();
+      var router = app.router;
+      var token = localStorage.getItem("token");
+      if(app.data.checkin==''){
+        app.dialog.alert('Bạn vẫn chưa checkin hôm nay', 'Thông báo');
+        return;
+      }
+      if(app.data.checkout!=''){
+        app.dialog.alert('Bạn đã checkout hôm nay rồi', 'Thông báo');
+        return;
+      }
+      navigator.camera.getPicture(function(fileURI){
+        var options = new FileUploadOptions();
+        options.fileKey = "photo";
+        options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+        options.mimeType = "image/jpeg";
+        options.headers = { Connection: "close", token:token };
+        options.httpMethod="POST";
+        options.chunkedMode=false;
+        var ft = new FileTransfer();
+        ft.upload(fileURI, encodeURI("http://lavie.liveapps.top/index.php/app/checkout"), function(raw){
+          app.dialog.close();
+          if(raw.response=='invalid'){
+            app.dialog.alert('Phiên làm việc đã hết hạn', 'Báo lỗi', function(){
+              router.navigate('/login/', {reloadAll:true, ignoreCache:true});
+            });
+            return;
+          }
+          if(raw.response=='failed'){
+            app.dialog.alert('Không gửi được hình chụp từ Camera', 'Báo lỗi');
+            return;
+          }
+          if(json.result=='nocheckin'){
+            app.dialog.alert('Bạn vẫn chưa checkin hôm nay', 'Thông báo');
+          }
+          if(json.result=='already'){
+            app.dialog.alert('Bạn đã checkout hôm nay rồi', 'Thông báo');
+          }
+          app.dialog.alert('Ghi nhận lúc ' + json.checkout, 'Checkout thành công', function(){
+            router.navigate('/status/', {reloadAll:true, reloadCurrent: true, ignoreCache:true});
+          });
+        }, function(error){
+          app.dialog.close();
+          app.dialog.alert('Không gửi được hình chụp từ Camera (' + error.code + ')', 'Báo lỗi');
+        }, options);
+        app.dialog.preloader('Đang gửi hình');
+      }, function(message) {
+       app.dialog.alert(message, 'Báo lỗi');
+       }, {
+         quality: 50,
+         correctOrientation: true,
+         destinationType: navigator.camera.DestinationType.FILE_URI,
+         sourceType: Camera.PictureSourceType.CAMERA
       });
     },
     logout: function(){

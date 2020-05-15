@@ -85,18 +85,16 @@
           <table>
             <thead>
               <tr>
-                <th width="45%" class="label-cell" align="left">Sản phẩm</th>
+                <th width="60%" class="label-cell" align="left">Sản phẩm</th>
                 <th class="numeric-cell" align="center" style="white-space:nowrap;">Tiếp cận</th>
                 <th class="numeric-cell" align="center">Mua</th>
-                <th class="numeric-cell" align="center" style="white-space:nowrap;">Trưng bày</th>
               </tr>
               {{#if empty_reports}}
               {{else}}
               <tr>
-                <th width="45%" class="label-cell" align="left">Tổng:</th>
+                <th width="60%" class="label-cell" align="left">Tổng:</th>
                 <th class="numeric-cell" align="center"><span class="badge color-red">{{sum_reports.views}}</span></th>
                 <th class="numeric-cell" align="center"><span class="badge color-red">{{sum_reports.buys}}</span></th>
-                <th class="numeric-cell" align="center"><span class="badge color-red">{{sum_reports.display}}</span></th>
               </tr>
               {{/if}}
             </thead>
@@ -106,7 +104,6 @@
                 <td class="label-cell" align="left">{{this.product}}</td>
                 <td class="numeric-cell" align="center"><span class="badge">{{this.views}}</span></td>
                 <td class="numeric-cell" align="center"><span class="badge">{{this.buys}}</span></td>
-                <td class="numeric-cell" align="center"><span class="badge">{{this.display}}</span></td>
               </tr>
               {{else}}
               <tr>
